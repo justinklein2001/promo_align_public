@@ -1,0 +1,45 @@
+{
+  "name": "promo_align",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "drizzle:generate": "drizzle-kit generate",
+    "drizzle:push": "drizzle-kit push"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@hookform/resolvers": "^5.0.1",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.1.0",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@xyflow/react": "^12.6.0",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.43.1",
+    "jsonwebtoken": "^9.0.2",
+    "next": "15.3.2",
+    "pg": "^8.15.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.56.3",
+    "react-use": "^17.6.0",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/pg": "^8.15.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.1",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5"
+  }
+}
