@@ -1,0 +1,8 @@
+{
+  "schema": "./db/schema.ts",
+  "out": "./drizzle",
+  "dialect": "postgresql",
+  "dbCredentials": {
+    "connectionString": "postgres://root:ywXRMch0yu7g5LU43Nu1Et7DxU8yegRw@db:5432/song_promos_db"
+  }
+}

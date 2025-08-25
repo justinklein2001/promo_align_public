@@ -10,8 +10,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Run DB migrations
-RUN npm run drizzle:generate && npm run drizzle:push
+# generate DB migrations
+RUN npm run drizzle:generate
 
 # Build the project
 RUN npm run build
@@ -27,6 +27,11 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/drizzle ./drizzle
+COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=builder /app/db ./db
+COPY --from=builder /app/start.sh ./start.sh
+RUN chmod +x start.sh
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["./start.sh"]

@@ -176,6 +176,7 @@ export default function SongForm({ initialData, onSubmit, onCancel }: SongFormPr
                     src={typeof field.value === 'string' ? field.value : URL.createObjectURL(field.value)}
                     alt="Album Cover"
                     style={{ maxHeight: '140px', width: 'auto' }}
+                    unoptimized
                   />
                   <IconButton
                     sx={{ position: 'absolute', top: 0, right: 0 }}
