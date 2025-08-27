@@ -270,8 +270,9 @@ export function useAppState() {
           });
           // Delete uploaded files
           if (nodeToDelete.type === "song") {
+            const nodeToDeleteData = nodeToDelete?.data as SongNodeData
             try {
-              await fetch(`/api/delete-file?path=${encodeURIComponent(nodeToDelete?.data?.audioFile)}`, {
+              await fetch(`/api/delete-file?path=${encodeURIComponent(nodeToDeleteData.audioFile as string)}`, {
                 method: 'DELETE',
               });
               } catch (error) {
@@ -279,14 +280,15 @@ export function useAppState() {
               }
 
               try {
-              await fetch(`/api/delete-file?path=${encodeURIComponent(nodeToDelete?.data?.albumCover)}`, {
+              await fetch(`/api/delete-file?path=${encodeURIComponent(nodeToDeleteData.albumCover as string)}`, {
                 method: 'DELETE',
               });
               } catch (error) {
                 console.error('Failed to delete album cover file:', error);
               }
           } else if (nodeToDelete.type === "promo"){
-              nodeToDelete?.data?.sketches?.forEach(async (file: string) => {
+              const nodeToDeleteData = nodeToDelete?.data as PromoNodeData
+              nodeToDeleteData.sketches?.forEach(async (file: File | string) => {
                  try {
                   await fetch(`/api/delete-file?path=${encodeURIComponent(file as string)}`, {
                     method: 'DELETE',
