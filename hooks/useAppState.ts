@@ -263,11 +263,40 @@ export function useAppState() {
       // Delete nodes first
       for (const nodeId of deletedNodes) {
         const nodeToDelete = originalNodes.find(n => n.id === nodeId);
+        // Delete nodes in db tables
         if (nodeToDelete) {
           await fetch(`/api/delete-node?id=${nodeId}&type=${nodeToDelete.type}`, {
             method: 'DELETE'
           });
-        }
+          // Delete uploaded files
+          if (nodeToDelete.type === "song") {
+            try {
+              await fetch(`/api/delete-file?path=${encodeURIComponent(nodeToDelete?.data?.audioFile)}`, {
+                method: 'DELETE',
+              });
+              } catch (error) {
+                console.error('Failed to delete audio file:', error);
+              }
+
+              try {
+              await fetch(`/api/delete-file?path=${encodeURIComponent(nodeToDelete?.data?.albumCover)}`, {
+                method: 'DELETE',
+              });
+              } catch (error) {
+                console.error('Failed to delete album cover file:', error);
+              }
+          } else if (nodeToDelete.type === "promo"){
+              nodeToDelete?.data?.sketches?.forEach(async (file: string) => {
+                 try {
+                  await fetch(`/api/delete-file?path=${encodeURIComponent(file as string)}`, {
+                    method: 'DELETE',
+                  });
+                } catch (error) {
+                  console.error('Failed to delete album cover file:', error);
+                }
+              });
+          }
+        } 
       }
       
       // Update node positions

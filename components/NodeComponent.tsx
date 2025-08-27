@@ -98,14 +98,14 @@ const NodeComponent: React.FC<CustomNodeProps> = ({ data, type, onDelete, showDe
         )}
         {nodeData.albumCover && !isPromo && (
           <Box sx={{ mt: 1 }}>
-            <Image src={nodeData.albumCover} alt="Album Cover" style={{ maxHeight: '50px', width: 'auto' }} unoptimized/>
+            <Image height={200} width={200} src={nodeData.albumCover} alt="Album Cover" style={{ maxHeight: '50px', width: 'auto' }} unoptimized/>
           </Box>
         )}
         {isPromo && nodeData.sketches && nodeData.sketches.length > 0 && (
           <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap' }}>
             {nodeData.sketches.map((sketch: string, index: number) => (
               !isVideo(sketch) && (
-                <Image key={index} src={sketch} alt={`Sketch ${index + 1}`} style={{ maxHeight: '50px', margin: '5px' }} unoptimized/>
+                <Image height={200} width={200} key={index} src={sketch} alt={`Sketch ${index + 1}`} style={{ maxHeight: '50px', margin: '5px' }} unoptimized/>
               )
             ))}
           </Box>
