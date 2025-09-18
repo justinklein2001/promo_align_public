@@ -1,28 +1,30 @@
-# Install dependencies
+# Dependencies
 FROM node:20-alpine AS deps
 WORKDIR /app
+
+# Force devDependencies to be installed
+ENV NODE_ENV=development
 COPY package.json package-lock.json* ./
 RUN npm ci
-RUN npm install
-# Copy app contents
+
+
+# Copy app and build
 FROM node:20-alpine AS builder
 WORKDIR /app
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# generate DB migrations
-RUN npm run drizzle:generate
 
 # Build the project
 RUN npm run build
 
-# Production image
+# Runtime image
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
-# Only copy what you need
+# Copy only what’s needed
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
@@ -31,7 +33,10 @@ COPY --from=builder /app/drizzle ./drizzle
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder /app/db ./db
 COPY --from=builder /app/start.sh ./start.sh
-RUN chmod +x start.sh
 
-EXPOSE 3000
+# Fix permissions
+RUN chown -R node:node /app && chmod +x /app/start.sh
+
+USER node
+
 CMD ["./start.sh"]

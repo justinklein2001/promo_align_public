@@ -3,39 +3,47 @@ version: '3'
 services:
   db:
     image: postgres:15
-    container_name: nextjs_db
+    container_name: promo_align_db
     restart: unless-stopped
-    ports:
-      - '5432:5432'
     env_file:
       - .env
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - promo-align-local
 
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nextjs_app
+    container_name: promo_align_nextjs
     env_file:
       - .env
-    expose:
-      - "3000"  # Only expose to internal network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.promo_align.tls=true
+      - traefik.http.routers.promo_align.tls.certresolver=cloudflare # maps to cloudflare certificate resolver in traefik.yml
+      - traefik.http.routers.promo_align.entrypoints=websecure # open it up to 443
+      - traefik.http.routers.promo_align.rule=Host(`promo-align.justinhomelab.ca`)
     depends_on:
       - db
     volumes:
       - ./public/uploads:/app/public/uploads
-
-  nginx:
-    image: nginx:alpine
-    container_name: nginx_proxy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    depends_on:
-      - web
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-
+    expose:
+      - "3000" # expose port to the Traefik network
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0 # tell it to bind to the host
+    networks: 
+      - proxy # add it to external traefik network
+      - promo-align-local
 volumes:
   pgdata:
+
+# expose to traefik
+networks:
+  proxy:
+    external: true
+  promo-align-local:
+    driver: bridge

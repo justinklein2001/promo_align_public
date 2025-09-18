@@ -1,5 +1,5 @@
 # Run migrations
-npm run drizzle:push
+npm run drizzle:migrate
 
 # Start the app
 npm start

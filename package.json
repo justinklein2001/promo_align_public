@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "drizzle:generate": "drizzle-kit generate --config=drizzle.config.ts",
-    "drizzle:push": "drizzle-kit push --config=drizzle.config.ts"
+    "drizzle:push": "drizzle-kit push --config=drizzle.config.ts",
+    "drizzle:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -16,10 +17,12 @@
     "@hookform/resolvers": "^5.0.1",
     "@mui/icons-material": "^7.1.0",
     "@mui/material": "^7.1.0",
+    "@next/font": "^14.2.15",
     "@types/jsonwebtoken": "^9.0.9",
     "@xyflow/react": "^12.6.0",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
+    "geist": "^1.5.1",
     "jsonwebtoken": "^9.0.2",
     "next": "15.3.2",
     "pg": "^8.15.6",
