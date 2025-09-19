@@ -1,25 +1,45 @@
 name: Deploy Promo Align
-
 on:
   push:
     branches: [ main ]
-env:
-  working-directory: ./
-jobs:
-  migrate:
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v4
-      - run: docker compose down
-      - run: docker compose up -d db
-      - run: npm install drizzle-kit --no-save
-      - run: npm run drizzle:migrate
-        env:
-          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
 
-  build-and-push:
+jobs:
+  deploy:
     runs-on: self-hosted
-    needs: migrate
+    defaults:
+      run:
+        working-directory: ./  # repo root
+
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
     steps:
       - uses: actions/checkout@v4
-      - run: docker compose up -d --build web
+
+      - name: Stop any running containers
+        run: docker compose down
+
+      - name: Start Postgres
+        run: docker compose up -d db
+
+      - name: Wait for DB
+        run: |
+          until docker exec promo_align_db pg_isready -U $POSTGRES_USER; do
+            sleep 2
+          done
+
+      - name: Install Drizzle CLI
+        run: npm install drizzle-kit --no-save
+
+      - name: Run migrations
+        run: npm run drizzle:migrate
+
+      - name: Build & deploy Next.js
+        run: docker compose up -d --build web 
