@@ -23,21 +23,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Stop any running containers
-        run: docker compose down
+  steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Start Postgres
+      - name: Stop old containers
+        run: docker compose down || true
+
+      - name: Build web container
+        run: docker compose build web
+
+      - name: Start DB
         run: docker compose up -d db
 
-      - name: Wait for DB
+      - name: Wait for Postgres to be ready
         run: |
           until docker exec promo_align_db pg_isready -U $POSTGRES_USER; do
+            echo "Waiting for Postgres..."
             sleep 2
           done
 
+      - name: Start web container (app)
+        run: docker compose up -d web
+
       - name: Run migrations inside web container
-        run: docker compose run --rm web sh -c "npm install drizzle-kit --no-save && npx drizzle-kit migrate"
-
-
-      - name: Build & deploy Next.js
-        run: docker compose up -d --build web 
+        run: |
+          set -e
+          docker compose run --rm web npx drizzle-kit migrate || \
+          (echo "Migration failed, shutting down containers" && docker compose down && exit 1)
