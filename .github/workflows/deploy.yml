@@ -13,7 +13,7 @@ jobs:
       - run: npm install drizzle-kit --no-save
       - run: npm run drizzle:migrate
         env:
-          DATABASE_URL: ${{ secrets.POSTGRES_URL }}
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
 
   build-and-push:
     runs-on: self-hosted
