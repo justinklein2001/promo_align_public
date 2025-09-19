@@ -36,7 +36,8 @@ jobs:
           done
 
       - name: Run migrations inside web container
-        run: docker compose run --rm web sh -c "npm install drizzle-kit --no-save && npm run drizzle:migrate"
+        run: docker compose run --rm web sh -c "npm install drizzle-kit --no-save && npx drizzle-kit migrate"
+
 
       - name: Build & deploy Next.js
         run: docker compose up -d --build web 
