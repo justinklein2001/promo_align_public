@@ -5,7 +5,7 @@ WORKDIR /app
 # Force devDependencies to be installed
 ENV NODE_ENV=development
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN npm install
 
 
 # Copy app and build
@@ -22,7 +22,7 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
 
 # Copy only what’s needed
 COPY --from=builder /app/public ./public

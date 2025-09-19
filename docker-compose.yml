@@ -32,7 +32,6 @@ services:
     expose:
       - "3000" # expose port to the Traefik network
     environment:
-      - NODE_ENV=production
       - PORT=3000
       - HOST=0.0.0.0 # tell it to bind to the host
       - POSTGRES_URL=${POSTGRES_URL}
