@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json*  ./
-RUN npm install
+RUN npm ci
 
 
 # Rebuild the source code only when needed
@@ -34,8 +34,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
-
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder /app/public ./public
@@ -48,7 +46,7 @@ COPY --from=builder /app/db ./db
 COPY --from=builder /app/start.sh ./start.sh
 
 # Fix permissions
-RUN chown -R nextjs:nextjs /app && chmod +x /app/start.sh
+RUN chown -R nextjs:nodejs /app && chmod +x /app/start.sh
 
 USER nextjs
 CMD ["./start.sh"]
