@@ -47,9 +47,8 @@ COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder /app/db ./db
 COPY --from=builder /app/start.sh ./start.sh
 
-USER nextjs
-
 # Fix permissions
 RUN chown -R nextjs:nextjs /app && chmod +x /app/start.sh
 
+USER nextjs
 CMD ["./start.sh"]
