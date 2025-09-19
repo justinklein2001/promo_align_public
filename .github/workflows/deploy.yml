@@ -35,11 +35,9 @@ jobs:
             sleep 2
           done
 
-      - name: Install Drizzle CLI
-        run: npm install drizzle-kit --no-save
-
-      - name: Run migrations
-        run: npm run drizzle:migrate
+      - name: Run migrations inside web container
+        run: docker compose run --rm web npm install drizzle-kit --no-save && \
+             docker compose run --rm web npm run drizzle:migrate
 
       - name: Build & deploy Next.js
         run: docker compose up -d --build web 
