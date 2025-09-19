@@ -24,6 +24,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # next js can't build without npm on host
+      - name: Host npm install
+        run: npm install
+        
       - name: Stop old containers
         run: docker compose down || true
 
