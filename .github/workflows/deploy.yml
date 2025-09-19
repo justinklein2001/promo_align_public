@@ -28,7 +28,7 @@ jobs:
         run: docker compose down || true
 
       - name: Build web container
-        run: docker compose build web
+        run: docker compose build web --no-cache
 
       - name: Start DB
         run: docker compose up -d db
