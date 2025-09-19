@@ -5,7 +5,7 @@ WORKDIR /app
 # Force devDependencies to be installed
 ENV NODE_ENV=development
 COPY package.json package-lock.json* ./
-RUN npm install
+RUN npm install --include=dev
 
 
 # Copy app and build
