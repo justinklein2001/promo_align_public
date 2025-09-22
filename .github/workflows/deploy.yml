@@ -26,7 +26,7 @@ jobs:
 
       # next js can't build without npm on host
       - name: Host npm install
-        run: npm install
+        run: npm ci
         
       - name: Stop old containers
         run: docker compose down || true
