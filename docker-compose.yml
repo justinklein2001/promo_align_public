@@ -25,6 +25,7 @@ services:
       - traefik.http.routers.promo_align.tls.certresolver=cloudflare # maps to cloudflare certificate resolver in traefik.yml
       - traefik.http.routers.promo_align.entrypoints=websecure # open it up to 443
       - traefik.http.routers.promo_align.rule=Host(`promo-align.justinhomelab.ca`)
+      - traefik.http.services.promo_align.loadbalancer.server.port=3000
     depends_on:
       - db
     volumes:
