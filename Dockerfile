@@ -44,9 +44,9 @@ COPY --from=builder /app/drizzle ./drizzle
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder /app/db ./db
 COPY --from=builder /app/start.sh ./start.sh
-
 # Fix permissions
 RUN chown -R nextjs:nodejs /app && chmod +x /app/start.sh
+RUN mkdir -p /app/public/uploads && chown -R nextjs:nodejs /app/public/uploads
 
 USER nextjs
 CMD ["./start.sh"]
