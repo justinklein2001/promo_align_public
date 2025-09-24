@@ -29,7 +29,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./public/uploads:/app/public/uploads
+      - uploads_data:/app/public/uploads # named volume so docker has permission
     expose:
       - "3000" # expose port to the Traefik network
     environment:
