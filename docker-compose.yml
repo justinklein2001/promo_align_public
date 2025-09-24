@@ -45,6 +45,7 @@ services:
       - promo-align-local
 volumes:
   pgdata:
+  uploads_data:
 
 # expose to traefik
 networks:
